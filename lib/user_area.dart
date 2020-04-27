@@ -57,11 +57,17 @@ class _PlaygroundState extends State<Playground> {
                   ),
                   DialogButton(
                     child: Text(
-                      "Click image",
+                      "Click picture",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () async{
+                      var image = await ImagePicker.pickImage(source: ImageSource.camera);
+                      setState(() {
+                        img=FileImage(image);
+                        showSnack(context);
+                      });
+                      Navigator.pop(context);},
                     gradient: LinearGradient(colors: [
                       Color.fromRGBO(116, 116, 191, 1.0),
                       Color.fromRGBO(52, 138, 199, 1.0)
@@ -154,7 +160,7 @@ class _PlaygroundState extends State<Playground> {
                           items.add(textVal);
                       });
 //                      await _firestore.collection(widget._user.uid).add(
-//                      {'asd':textVal});
+//                      {'text':textVal});
                       Navigator.pop(context);
                       },
                     gradient: LinearGradient(colors: [
@@ -174,41 +180,90 @@ class _PlaygroundState extends State<Playground> {
       itemBuilder: (context, index) {
         final item = items[index];
 
-        return Dismissible(
+        return GestureDetector(
+          child: Dismissible(
 
-          key: Key(item),
+            key: Key(item),
 
-          onDismissed: (direction) {
-            setState(() {
-              items.removeAt(index);
-            });
+            onDismissed: (direction) {
+              setState(() {
+                items.removeAt(index);
+              });
 
-            Scaffold.of(context)
-                .showSnackBar(SnackBar(content: Text('Note dismissed',
-                style: TextStyle(letterSpacing: 2, fontSize: 16, fontWeight: FontWeight.w600),),
-              duration: Duration(milliseconds: 2000),
-              backgroundColor: Colors.grey[500],
-            ));
-          },
-          background: Container(
-            decoration: BoxDecoration(color: Colors.red),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('Delete',style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-                Text('Delete',style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(content: Text('Note dismissed',
+                  style: TextStyle(letterSpacing: 2, fontSize: 16, fontWeight: FontWeight.w600),),
+                duration: Duration(milliseconds: 2000),
+                backgroundColor: Colors.grey[500],
+              ));
+            },
+            background: Container(
+              decoration: BoxDecoration(color: Colors.red),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('Delete',style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                  Text('Delete',style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+                ],
+              ),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white70,
+                border: Border.all(color: Colors.black)
+              ),
+              child: ListTile(
+                title: Text('$item', style: TextStyle(color: Colors.black),),
+              ),
+            ),
+          ),
+          onTap: (){
+            print('tapped');
+            final TextEditingController _myController = TextEditingController()..text=item;
+            String textVal;
+            Alert(
+              context: context,
+              style: AlertStyle(backgroundColor: Colors.white),
+              title: "Edit note",
+              content: TextField(
+                controller: _myController,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                ),
+                decoration: InputDecoration(
+                  icon: Icon(Icons.message, color: Colors.blueGrey,),
+                  hintText: 'Enter custom note here',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  focusColor: Colors.black,
+                ),
+                cursorColor: Colors.blueGrey[400],
+                onChanged: (value){
+                  textVal=value;
+                  print(value);
+                },
+              ),
+              buttons: [
+                DialogButton(
+                  child: Text(
+                    "Save note",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                  onPressed: () async{
+                    setState(() {
+                      items.removeAt(index);
+                      if(textVal!=null)
+                        items.insert(index,textVal);
+                    });
+//                      await _firestore.collection(widget._user.uid).add(
+//                      {'text':textVal});
+                    Navigator.pop(context);
+                  },
+                ),
               ],
-            ),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white70,
-              border: Border.all(color: Colors.black)
-            ),
-            child: ListTile(
-              title: Text('$item', style: TextStyle(color: Colors.black),),
-            ),
-          ),
+            ).show();
+          },
         );
       },
       ),
