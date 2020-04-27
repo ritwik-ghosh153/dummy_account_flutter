@@ -20,7 +20,8 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
-
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -51,4 +52,10 @@ android {
 
 flutter {
     source '../..'
+}
+
+dependencies {
+    // add SDKs for desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
+    implementation 'com.google.firebase:firebase-core:16.0.1'
 }

@@ -59,5 +59,11 @@
     <string>Need to upload image</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Need to upload image</string>
+    <key>UIBackgroundModes</key>
+        <array>
+            <string>remote-notification</string>
+        </array>
+     <key>FirebaseAppDelegateProxyEnabled</key>
+     <true/>
 </dict>
 </plist>
