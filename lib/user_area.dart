@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:image_picker/image_picker.dart';
-import 'items.dart';
 import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 
@@ -23,6 +23,7 @@ class Playground extends StatefulWidget {
 class _PlaygroundState extends State<Playground> {
 
   final List<String> items=[];
+  final _firestore= Firestore.instance;
   var img;
   @override
   Widget build(BuildContext context) {
@@ -86,8 +87,6 @@ class _PlaygroundState extends State<Playground> {
                   )
                 ],
               ).show();
-//              final snackBar = SnackBar(content: Text('Image updated'));
-//              Scaffold.of(context).showSnackBar(snackBar);
             },
             child: Padding(
               padding: const EdgeInsets.only(left: 10.0),
@@ -145,14 +144,17 @@ class _PlaygroundState extends State<Playground> {
                 buttons: [
                   DialogButton(
                     child: Text(
-                      "Click image",
+                      "Add note",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
-                    onPressed: () {
+                    onPressed: () async{
                       setState(() {
-                        items.add(textVal);
+                        if(textVal!=null)
+                          items.add(textVal);
                       });
+//                      await _firestore.collection(widget._user.uid).add(
+//                      {'asd':textVal});
                       Navigator.pop(context);
                       },
                     gradient: LinearGradient(colors: [
@@ -182,10 +184,31 @@ class _PlaygroundState extends State<Playground> {
             });
 
             Scaffold.of(context)
-                .showSnackBar(SnackBar(content: Text("$item dismissed")));
+                .showSnackBar(SnackBar(content: Text('Note dismissed',
+                style: TextStyle(letterSpacing: 2, fontSize: 16, fontWeight: FontWeight.w600),),
+              duration: Duration(milliseconds: 2000),
+              backgroundColor: Colors.grey[500],
+            ));
           },
-          background: Container(color: Colors.red),
-          child: ListTile(title: Text('$item')),
+          background: Container(
+            decoration: BoxDecoration(color: Colors.red),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text('Delete',style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                Text('Delete',style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),),
+              ],
+            ),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white70,
+              border: Border.all(color: Colors.black)
+            ),
+            child: ListTile(
+              title: Text('$item', style: TextStyle(color: Colors.black),),
+            ),
+          ),
         );
       },
       ),
@@ -198,7 +221,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnack(BuildContext
     content: Text('Image Updated',
         style: TextStyle(letterSpacing: 2, fontSize: 16, fontWeight: FontWeight.w600),
     ),
-    duration: Duration(seconds: 3),
+    duration: Duration(milliseconds: 2000),
     backgroundColor: Colors.grey[500],
   ));
 }
