@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-//import 'package:image_picker/image_picker.dart';
-//
-//var img;
 
 class Signin extends StatelessWidget {
 
@@ -156,23 +153,32 @@ class Signin extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            MaterialButton(
-              color: Colors.red,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('log in with google\t'),
-                  Icon(Icons.search),
-                ],
+            Builder(
+              builder:(context)=> MaterialButton(
+                color: Colors.red,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Log in with google\t'),
+                    Icon(Icons.search),
+                  ],
+                ),
+                onPressed: () async{
+                  FirebaseUser user = await _handleSignIn();
+                  String show= await Navigator.push(context, MaterialPageRoute(builder: (context)=>Playground(user, _googleSignIn)));
+                  print(show);
+                  Scaffold.of(context)
+                    ..removeCurrentSnackBar()
+                    ..showSnackBar(SnackBar(content: Text(show,
+                      style: TextStyle(
+                          letterSpacing: 2, fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                      duration: Duration(milliseconds: 2000),
+                      backgroundColor: Colors.grey[500],
+                  ));
+                },
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
               ),
-              onPressed: () async{
-//                var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-//                img=Image.file(image);
-//                print(img);
-                FirebaseUser user = await _handleSignIn();
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Playground(user, _googleSignIn)));
-              },
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
             ),
             SizedBox(height: 30,),
             MaterialButton(
@@ -180,7 +186,7 @@ class Signin extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('log in with phone number\t'),
+                    Text('Log in with phone number\t'),
                     Icon(Icons.phone)
                   ],
                 ),
