@@ -204,7 +204,7 @@ class Signin extends StatelessWidget {
                         decoration: InputDecoration(
                           prefixText: '+91 ',
                           icon: Icon(Icons.phone, color: Colors.blueGrey,),
-                          hintText: 'Placeholder number',
+                          hintText: '1234567890',
                           hintStyle: TextStyle(color: Colors.grey),
                           focusColor: Colors.black,
                         ),
