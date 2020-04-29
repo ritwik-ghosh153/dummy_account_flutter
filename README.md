@@ -1,6 +1,6 @@
-# dummy_account
+# dummyaccount
 
-An app to have dummy accounts of users
+A new Flutter application.
 
 ## Getting Started
 

@@ -1,4 +1,4 @@
-package com.ghosh.dummy_account;
+package com.ghosh.dummyaccount;
 
 import io.flutter.embedding.android.FlutterActivity;
 

@@ -1,11 +1,11 @@
 {
-    "name": "dummy_account",
-    "short_name": "dummy_account",
+    "name": "dummyaccount",
+    "short_name": "dummyaccount",
     "start_url": ".",
     "display": "minimal-ui",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "An app to have dummy accounts of users",
+    "description": "A new Flutter application.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
